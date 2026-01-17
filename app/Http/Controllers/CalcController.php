@@ -7,16 +7,10 @@ use Illuminate\Http\Request;
 
 class CalcController extends Controller
 {
-    private $calcService;
-
-    public function __construct(CalcService $calcService)
-    {
-        $this->calcService = $calcService;
-    }
+    public function __construct(private CalcService $calcService) {}
 
     public function calc()
     {
-        $calcResult = $this->calcService->calc();
-        return response()->json($calcResult);
+        return response()->json($this->calcService->calc());
     }
 }
