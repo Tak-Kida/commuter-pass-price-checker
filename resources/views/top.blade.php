@@ -15,19 +15,16 @@
 <body>
     <h1>きっぷと定期券、どちらが安いか計算します</h1>
 
-    <form action="/calc" method="post">
-        @csrf
-        <input type="text" name="origin" placeholder="出発地を入力">
-        <input type="text" name="destination" placeholder="目的地を入力">
+    <input type="text" name="origin" placeholder="出発地を入力">
+    <input type="text" name="destination" placeholder="目的地を入力">
 
-        <input type="number" name="ticket_price" placeholder="片道分の切符の値段を入力">
-        <input type="number" name="subscription_price" placeholder="定期券の値段を入力">
+    <input type="number" name="ticket_price" placeholder="片道分の切符の値段を入力">
+    <input type="number" name="subscription_price" placeholder="定期券の値段を入力">
 
-        <input type="number" name="subscription_start_date" placeholder="利用開始日を入力">
-        <input type="number" name="subscription_end_date" placeholder="利用終了日を入力">
+    <input type="number" name="subscription_start_date" placeholder="利用開始日を入力">
+    <input type="number" name="subscription_end_date" placeholder="利用終了日を入力">
 
-        <input type="submit" value="計算">
-    </form>
+    <input type="submit" value="計算" id="send-calc-button">
 
     @if (isset($cheaper_kind))
         <div id="result">
@@ -42,5 +39,27 @@
         </div>
     @endif
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    console.log('script loaded');
+
+    const calcRequestUrl = 'http://localhost:8000/api/calc';
+    const data = {
+        origin: '東京',
+        destination: '大阪',
+        ticket_price: 1000,
+        subscription_price: 10000,
+    };
+    const sendCalcButton = document.getElementById('send-calc-button');
+    sendCalcButton.onclick = () => {
+        axios.post(
+            calcRequestUrl,
+            data,
+        ).then(response => {
+            console.log(response.data);
+        });
+    }
+</script>
 
 </html>
