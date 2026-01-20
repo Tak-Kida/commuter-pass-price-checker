@@ -52,13 +52,15 @@
         subscription_price: 10000,
     };
     const sendCalcButton = document.getElementById('send-calc-button');
+
+    async function sendCalc() {
+        const response = await axios.post(calcRequestUrl, data);
+        console.log(response.data);
+    }
+
     sendCalcButton.onclick = () => {
-        axios.post(
-            calcRequestUrl,
-            data,
-        ).then(response => {
-            console.log(response.data);
-        });
+        console.log('sendCalcButton clicked');
+        sendCalc();
     }
 </script>
 
