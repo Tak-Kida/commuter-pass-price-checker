@@ -46,10 +46,8 @@
 
     const calcRequestUrl = 'http://localhost:8000/api/calc';
     const data = {
-        origin: '東京',
-        destination: '大阪',
-        ticket_price: 1000,
-        subscription_price: 10000,
+        start_date: '2026-01-01',
+        ticket_period_month: 1,
     };
     const sendCalcButton = document.getElementById('send-calc-button');
 

@@ -2,9 +2,19 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
+use \Yasumi\Yasumi;
 
 class CalcService
 {
+
+    private \Yasumi\ProviderInterface $holidays;
+
+    public function __construct()
+    {
+        $this->holidays = Yasumi::create('Japan', 2026, 'ja_JP');
+    }
+
     public function returnDemoData()
     {
         $cheaper_kind = "定期券";
@@ -17,5 +27,24 @@ class CalcService
             'cheaper_kind' => $cheaper_kind,
             'additional_info' => $additional_info,
         ];
+    }
+
+    public function calc(Carbon $startDate, int $ticketPeriodMonth)
+    {
+        $endDate = $startDate->addMonthsNoOverflow($ticketPeriodMonth);
+
+        $holidayCount = $this->countHolidays($startDate, $endDate);
+
+        return $holidayCount;
+    }
+
+    private function countHolidays(Carbon $startDate, string $endDate)
+    {
+        $holidays = $this->holidays;
+        $days = $startDate->diffInDaysFiltered(
+            fn (Carbon $date) => !$date->isWeekend() && !$holidays->isHoliday($date),
+            $endDate
+        );
+        return $days;
     }
 }
