@@ -5,7 +5,7 @@ namespace App\Services;
 
 class CalcService
 {
-    public function calc()
+    public function returnDemoData()
     {
         $cheaper_kind = "定期券";
         $additional_info = [

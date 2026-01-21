@@ -11,6 +11,6 @@ class CalcController extends Controller
 
     public function calc()
     {
-        return response()->json($this->calcService->calc());
+        return response()->json($this->calcService->returnDemoData());
     }
 }
