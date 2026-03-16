@@ -168,3 +168,12 @@ docker compose exec app php artisan key:generate
 
 - [Laravel ドキュメント](https://laravel.com/docs)
 - [Yasumi - 祝日ライブラリ](https://github.com/azuyalabs/yasumi)
+
+---
+
+## 変更履歴
+
+| 日付       | 内容                 |
+| ---------- | -------------------- |
+| 2026-03-12 | ドキュメント初版作成 |
+| 2026-03-16 | ドキュメント分割、リモートワーク入力を頻度指定に変更 |
