@@ -31,14 +31,14 @@ class CalcService
 
     public function calc(Carbon $startDate, int $ticketPeriodMonth)
     {
-        $endDate = $startDate->addMonthsNoOverflow($ticketPeriodMonth);
+        $endDate = $startDate->copy()->addMonthsNoOverflow($ticketPeriodMonth);
 
-        $holidayCount = $this->countHolidays($startDate, $endDate);
+        $holidayCount = $this->countWorkdays($startDate, $endDate);
 
         return $holidayCount;
     }
 
-    private function countHolidays(Carbon $startDate, string $endDate)
+    private function countWorkdays(Carbon $startDate, Carbon $endDate)
     {
         $holidays = $this->holidays;
         $days = $startDate->diffInDaysFiltered(

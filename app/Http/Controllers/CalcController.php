@@ -12,13 +12,15 @@ class CalcController extends Controller
 
     public function calc(Request $request)
     {
-        // return response()->json($this->calcService->returnDemoData());
-
         $requestData = $request->all();
-        $startDate = Carbon::parse($requestData['start_date']);
-        $ticketPeriodMonth = $requestData['ticket_period_month'];
+        $ticketPeriodMonth = $requestData['ticket_period_month']; // 1, 3, 6
+        $startDate = Carbon::createFromFormat('Y-m-d', $requestData['start_date']);
+        $workdaysCount = $this->calcService->calc($startDate, $ticketPeriodMonth);
 
-        $result = $this->calcService->calc($startDate, $ticketPeriodMonth);
-        return response()->json(['result' => $result]);
+        return response()->json([
+            'startDate' => $requestData['start_date'],
+            'ticketPeriodMonth' => $ticketPeriodMonth,
+            'workdaysCount' => $workdaysCount,
+        ]);
     }
 }
