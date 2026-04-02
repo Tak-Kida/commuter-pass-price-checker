@@ -31,7 +31,7 @@ class CalcService
 
     public function calc(Carbon $startDate, int $ticketPeriodMonth)
     {
-        $endDate = $startDate->copy()->addMonthsNoOverflow($ticketPeriodMonth);
+        $endDate = $this->calculateExpirationDate($startDate, $ticketPeriodMonth);
 
         $holidayCount = $this->countWorkdays($startDate, $endDate);
 
@@ -41,10 +41,27 @@ class CalcService
     private function countWorkdays(Carbon $startDate, Carbon $endDate)
     {
         $holidays = $this->holidays;
-        $days = $startDate->diffInDaysFiltered(
+        $workDays = $startDate->diffInDaysFiltered(
             fn (Carbon $date) => !$date->isWeekend() && !$holidays->isHoliday($date),
             $endDate
         );
-        return $days;
+        return $workDays;
+    }
+
+    private function calculateExpirationDate(Carbon $startDate, int $months): Carbon
+    {
+        $originalDay = $startDate->day;
+
+        // N ヶ月後の年・月を求める（日はオーバーフローさせない）
+        $target = $startDate->copy()->addMonthsNoOverflow($months);
+        $lastDayOfTargetMonth = $target->copy()->endOfMonth()->day;
+
+        if ($originalDay > $lastDayOfTargetMonth) {
+            // 応当日が存在しない → その月の末日に満了
+            return $target->copy()->endOfMonth()->startOfDay();
+        }
+
+        // 応当日が存在する → 応当日の前日に満了
+        return Carbon::create($target->year, $target->month, $originalDay)->subDay();
     }
 }
